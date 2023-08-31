@@ -1,0 +1,43 @@
+.container{
+  width: 100%;
+  height: 100vh;
+
+  color: white;
+  background-color: #0c2a63ec;
+  animation: colorChange 3s infinite alternate;
+
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes colorChange {
+  0% {
+    background-color: #061736ce; /* Primer color */
+  }
+  100% {
+    background-color: #0c2a63ec; /* Segundo color */
+  }
+}
+
+h1{
+  font-size: 50px;
+}
+
+.startButton{
+  width: 50%;
+  height: 50px;
+  padding: 8px;
+  font-size: 1.5em;
+  background-color: #00b64c;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 1px 1px 8px black;
+}
+.startButton:hover{
+  background-color: #008b3a;
+  cursor: pointer;
+}

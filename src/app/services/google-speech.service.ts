@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class GoogleSpeechService {
 
-  API_URL: string = 'https://texttospeech.googleapis.com/v1/text:synthesize';
+  API_URL_CHAT_GPT: string = 'https://texttospeech.googleapis.com/v1/text:synthesize';
   API_KEY: string = 'TU_CLAVE_API_DE_GOOGLE'; // Reemplaza esto con tu clave API
 
   constructor(
@@ -28,6 +28,6 @@ export class GoogleSpeechService {
       "audioConfig": { audioEncoding: 'MP3' }
     };
 
-    return this.httpClient.post(this.API_URL, requestData, { headers: headers });
+    return this.httpClient.post(this.API_URL_CHAT_GPT, requestData, { headers: headers });
   }
 }

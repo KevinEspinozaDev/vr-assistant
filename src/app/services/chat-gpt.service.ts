@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ChatGptService {
-  API_URL: string = environment.API_URL;
+  API_URL_CHAT_GPT: string = environment.API_URL_CHAT_GPT;
   key: string;
   headers: any;
   options: any;
@@ -27,6 +27,6 @@ export class ChatGptService {
       temperature: 0.7
     }
 
-    return this.httpClient.post(this.API_URL, body, this.options);
+    return this.httpClient.post(this.API_URL_CHAT_GPT, body, this.options);
   }
 }

@@ -9,7 +9,7 @@ export class VoiceRecognitionService {
 
   recognition = new webkitSpeechRecognition();
   isStoppedSpeechRecognition = false;
-  public text = '';
+  text = '';
   tempWords: string = '';
 
   constructor() { }
@@ -17,43 +17,50 @@ export class VoiceRecognitionService {
   init(){
 
     this.recognition.addEventListener('result', (e:any) => {
+
       const transcript = Array.from(e.results)
       .map((result:any) => result[0])
       .map((result:any) => result.transcript)
       .join('');
 
       this.tempWords = transcript;
-      console.log(transcript);
     });
   }
 
-  start(){
+  start(): void{
     this.isStoppedSpeechRecognition = false;
     this.recognition.start();
-    console.log('recognition started')
+    console.log('_Recognition started');
 
+    // Ejecución constante
     this.recognition.addEventListener('end', (condition:any) => {
 
       if (this.isStoppedSpeechRecognition) {
         this.recognition.stop();
-        console.log('Recognition finished');
+        console.log('_Recognition finished.');
       }else{
-        this.wordConcat();
-        this.recognition.start();
+        this.setText();
+        this.recognition.start(); // Vuelve a escuchar
       }
 
     });
   }
 
-  stop(){
-    this.isStoppedSpeechRecognition = true;
-    this.wordConcat();
-    this.recognition.stop();
-    console.log('Recognition finished');
+  getText(): string{
+    return this.text;
   }
 
-  wordConcat(){
-    this.text = this.text + ' ' + this.tempWords + '.';
+  setText(){
+    this.text = this.tempWords;
+    localStorage.setItem('textVoice', this.text);
     this.tempWords = '';
   }
+
+  stop(){
+    this.isStoppedSpeechRecognition = true;
+    this.setText();
+    this.recognition.stop();
+    console.log('_Recognition finished');
+  }
+
 }

@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { ChatGptService } from '../services/chat-gpt.service';
 import { VoiceRecognitionService } from '../services/voice-recognition.service';
 import { Router } from '@angular/router';
+import { ElevenLabsService } from '../services/eleven-labs.service';
+import { environment } from 'environments/environment';
+declare var responsiveVoice: any;
 
 @Component({
   selector: 'app-assistant',
@@ -11,11 +14,19 @@ import { Router } from '@angular/router';
 export class AssistantComponent {
 
   title = 'vr-assistant';
-  textToSpeak: string = 'Hello! I am your assistant. Created by Kevin Espinoza';
+
+  voiceToTextRecognized: string = '';
+
   pitch: number = 1; // Tono
   rate: number = 1; // Velocidad
   lang: string = 'es'; //Lenguaje
   volume: string = '1';
+
+  audioBlobUrl: string = environment.API_URL_ELEVENLABS;
+  audioUrl = 'assets/audios/';
+
+  chatGPTResponse: string = '';
+
 
   webkitSpeechRecognition: any;
   recognition: any;
@@ -24,7 +35,8 @@ export class AssistantComponent {
   constructor(
     private router: Router,
     private chatGPTService: ChatGptService,
-    private voiceRecognitionService: VoiceRecognitionService
+    private voiceRecognitionService: VoiceRecognitionService,
+    private elevenLabsService: ElevenLabsService
   ){
 
   }
@@ -33,22 +45,44 @@ export class AssistantComponent {
     this.voiceRecognitionService.init();
   }
 
-  handleObjetoClick() {
+  interactuar() {
 
-    /*
-    this.chatGPTService.send('Hola, esta es una prueba de mi nueva app hacia la API de GPT. Me recibes?')
+    this.chatGPTService.send(this.voiceToTextRecognized)
     .subscribe({
       next: res => {
         const respuesta: string = res.choices[0].message.content;
-        console.log(respuesta);
+        this.chatGPTResponse = respuesta;
+
+        this.elevenLabsService.generate(this.chatGPTResponse)
+        .subscribe(
+          (blob: Blob) => {
+            this.playAudio(blob);
+          },
+          error => {
+            console.error('Error generating voice:', error);
+          }
+        );
+
       }
     });
-    */
+
+  }
+
+  playAudio(blob: Blob) {
+    const audio = new Audio(URL.createObjectURL(blob));
+    audio.play();
   }
 
   startRecognition() {
-    console.log('start')
     this.voiceRecognitionService.start();
+
+    setTimeout(() => {
+      const text = localStorage.getItem('textVoice')!;
+      this.voiceToTextRecognized = text;
+      console.log(this.voiceToTextRecognized)
+
+        this.interactuar();
+    }, 4000);
   }
 
   stopRecognition() {
@@ -70,12 +104,6 @@ export class AssistantComponent {
     } else {
       console.log('No se encontró una voz de mujer disponible.');
     }
-  }
-
-
-  speak() {
-    const utterance = new SpeechSynthesisUtterance(this.textToSpeak);
-    window.speechSynthesis.speak(utterance);
   }
 
   test(){

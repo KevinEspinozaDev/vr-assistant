@@ -1,42 +1,45 @@
 
-<a-scene class="scene" background="color: #0c2a63ec">
+<a-scene class="scene">
 
   <a-assets>
     <a-asset-item id="micOn" src="assets/models/mic_on.glb"></a-asset-item>
-    <a-asset-item id="micOff" src="assets/models/mic_off.gltf"></a-asset-item>
+    <a-asset-item id="micOff" src="assets/models/mic_off.glb"></a-asset-item>
+
+    <img id="sky" src="assets/backgrounds/background5.jpg">
 
   </a-assets>
 
-  <a-entity position="4 4 0" (click)="salir()">
-    <a-box color="red" scale="0.5 0.5 0.5"></a-box>
-    <a-text value="Salir" color="blue" scale="0.5 0.5 0.5" align="center" position="0 0 1"></a-text>
-  </a-entity>
+  <!---->
+  <a-sky src="#sky"></a-sky>
 
-  <a-entity position="0 1.5 -3" (click)="interactuar()">
-    <a-box color="blue" scale="0.5 0.5 0.5"></a-box>
-    <a-text value="Hablar" color="white" scale="0.5 0.5 0.5" align="center"
-    position="0 0 0"></a-text>
-  </a-entity>
 
+  <a-entity position="4 3 0" (click)="salir()">
+    <a-box color="red" rotation="0 0 90 0" scale="0.5 0.5 0.5"></a-box>
+    <a-text value="Salir" color="white" scale="0.5 0.5 0.5" align="center"
+    rotation="0 0 0"
+    position="0 0 1"></a-text>
+  </a-entity>
 
   <a-entity gltf-model="#micOn"
   *ngIf="ready && speaking"
-  scale="0.4 0.4 0.4"
-  position="0 1 0"
+  scale="0.5 0.5 0.5"
+  position="0 1 -2"
   crossOrigin="anonymous"
   (click)="test()"
   ></a-entity>
 
   <a-entity gltf-model="#micOff"
   *ngIf="ready && !speaking"
-  scale="0.4 0.4 0.4"
-  position="0 1 0"
+  scale="0.5 0.5 0.5"
+  position="0 1 -2"
   crossOrigin="anonymous"
   (click)="test()"
   ></a-entity>
 
+  <a-plane position="0 0 0" rotation="-90 0 0"
+  width="2" height="2" color="#666666"></a-plane>
 
-  <a-camera><a-cursor></a-cursor></a-camera>
+  <a-camera look-controls><a-cursor></a-cursor></a-camera>
 </a-scene>
 
 <!--

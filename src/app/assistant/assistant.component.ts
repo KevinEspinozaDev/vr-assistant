@@ -32,6 +32,10 @@ export class AssistantComponent {
   recognition: any;
   recognizedText: string = '';
 
+
+  ready = false;
+  speaking: boolean = false;
+
   constructor(
     private router: Router,
     private chatGPTService: ChatGptService,
@@ -43,6 +47,10 @@ export class AssistantComponent {
 
   ngOnInit(): void {
     this.voiceRecognitionService.init();
+
+    setTimeout(() => {
+      this.ready = true
+    }, 3000);
   }
 
   interactuar() {
@@ -108,6 +116,7 @@ export class AssistantComponent {
 
   test(){
     console.log('click!')
+    this.speaking = !this.speaking;
   }
 
   salir(): void{

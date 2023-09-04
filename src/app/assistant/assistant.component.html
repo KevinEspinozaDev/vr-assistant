@@ -1,9 +1,10 @@
 
-<a-scene class="scene">
+<a-scene class="scene" cull="false">
 
   <a-assets>
     <a-asset-item id="micOn" src="assets/models/mic_on.glb"></a-asset-item>
     <a-asset-item id="micOff" src="assets/models/mic_off.glb"></a-asset-item>
+    <a-asset-item id="girl" src="assets/models/girl.glb"></a-asset-item>
 
     <img id="sky" src="assets/backgrounds/background5.jpg">
 
@@ -22,22 +23,29 @@
 
   <a-entity gltf-model="#micOn"
   *ngIf="ready && speaking"
-  scale="0.5 0.5 0.5"
-  position="0 1 -2"
+  scale="0.4 0.4 0.4"
+  position="0 0 -1"
   crossOrigin="anonymous"
   (click)="test()"
   ></a-entity>
 
   <a-entity gltf-model="#micOff"
   *ngIf="ready && !speaking"
-  scale="0.5 0.5 0.5"
-  position="0 1 -2"
+  scale="0.4 0.4 0.4"
+  position="0 0 -1"
   crossOrigin="anonymous"
   (click)="test()"
   ></a-entity>
 
+  <a-entity gltf-model="#girl"
+  *ngIf="ready && !speaking"
+  scale="0.15 0.15 0.15"
+  position="0 0 -2"
+  crossOrigin="anonymous"
+  ></a-entity>
+
   <a-plane position="0 0 0" rotation="-90 0 0"
-  width="2" height="2" color="#666666"></a-plane>
+  width="1" height="1" color="#666666"></a-plane>
 
   <a-camera look-controls><a-cursor></a-cursor></a-camera>
 </a-scene>

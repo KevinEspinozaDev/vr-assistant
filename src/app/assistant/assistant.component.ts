@@ -61,21 +61,26 @@ export class AssistantComponent {
     this.isDataReady = true;
   }
 
+  // TODO! reiniciar el ciclo de escucha-transcripción y luego desactivar mic
   async startRecognition() {
     this.isSpeaking = true;
-    await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
 
-    // Coloca aquí la lógica que deseas ejecutar después de que termine el reconocimiento
-    const text = localStorage.getItem('textVoice')!;
-    this.voiceToTextRecognized = text;
+    if (this.isSpeaking) {
+      await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
+      // Coloca aquí la lógica que deseas ejecutar después de que termine el reconocimiento
+      const text = localStorage.getItem('textVoice')!;
+      this.voiceToTextRecognized = text;
 
-    // Reset
-    this.isSpeaking = false;
-    this.stopRecognition();
+      // Reset
+      this.isSpeaking = false;
+      this.stopRecognition();
+    }
   }
 
   stopRecognition() {
+    console.log('stopRecognition')
     this.voiceRecognitionService.stop();
+    this.isSpeaking = false;
   }
 
   sendToChatGPT() {

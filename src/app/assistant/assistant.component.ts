@@ -4,7 +4,11 @@ import { VoiceRecognitionService } from '../services/voice-recognition.service';
 import { Router } from '@angular/router';
 import { ElevenLabsService } from '../services/eleven-labs.service';
 import { environment } from 'environments/environment';
+
+// for Voice Recognition
 declare var responsiveVoice: any;
+declare var webkitSpeechRecognition: any;
+
 
 @Component({
   selector: 'app-assistant',
@@ -27,14 +31,14 @@ export class AssistantComponent {
 
   chatGPTResponse: string = '';
 
+  conversation: string = '';
 
   webkitSpeechRecognition: any;
-  recognition: any;
+  recognition = new webkitSpeechRecognition();
   recognizedText: string = '';
 
-
-  ready = false;
-  speaking: boolean = false;
+  isDataReady = false;
+  isSpeaking: boolean = false;
 
   constructor(
     private router: Router,
@@ -46,14 +50,35 @@ export class AssistantComponent {
   }
 
   ngOnInit(): void {
-    this.voiceRecognitionService.init();
 
     setTimeout(() => {
-      this.ready = true
+      this.initialize();
     }, 3000);
   }
 
-  interactuar() {
+  initialize(): void{
+    this.voiceRecognitionService.init();
+    this.isDataReady = true;
+  }
+
+  async startRecognition() {
+    this.isSpeaking = true;
+    await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
+
+    // Coloca aquí la lógica que deseas ejecutar después de que termine el reconocimiento
+    const text = localStorage.getItem('textVoice')!;
+    this.voiceToTextRecognized = text;
+
+    // Reset
+    this.isSpeaking = false;
+    this.stopRecognition();
+  }
+
+  stopRecognition() {
+    this.voiceRecognitionService.stop();
+  }
+
+  sendToChatGPT() {
 
     this.chatGPTService.send(this.voiceToTextRecognized)
     .subscribe({
@@ -81,21 +106,6 @@ export class AssistantComponent {
     audio.play();
   }
 
-  startRecognition() {
-    this.voiceRecognitionService.start();
-
-    setTimeout(() => {
-      const text = localStorage.getItem('textVoice')!;
-      this.voiceToTextRecognized = text;
-      console.log(this.voiceToTextRecognized)
-
-        this.interactuar();
-    }, 4000);
-  }
-
-  stopRecognition() {
-    this.voiceRecognitionService.stop();
-  }
 
   initializeVoices() {
     const voices = speechSynthesis.getVoices();
@@ -116,7 +126,7 @@ export class AssistantComponent {
 
   test(){
     console.log('click!')
-    this.speaking = !this.speaking;
+    this.isSpeaking = !this.isSpeaking;
   }
 
   salir(): void{

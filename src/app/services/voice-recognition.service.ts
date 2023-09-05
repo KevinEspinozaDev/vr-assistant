@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 
-declare var webkitSpeechRecognition: any;
+declare var SpeechRecognition: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class VoiceRecognitionService {
 
-  recognition = new webkitSpeechRecognition();
-  isStoppedSpeechRecognition = false;
+  recognition = new SpeechRecognition();
+  isStoppedSpeechRecognition = true;
   text = '';
   tempWords: string = '';
 
@@ -27,23 +27,30 @@ export class VoiceRecognitionService {
     });
   }
 
-  start(): void{
-    this.isStoppedSpeechRecognition = false;
-    this.recognition.start();
-    console.log('_Recognition started');
+  start(): Promise<void> {
 
-    // Ejecución constante
-    this.recognition.addEventListener('end', (condition:any) => {
+    return new Promise<void>((resolve) => {
 
       if (this.isStoppedSpeechRecognition) {
-        this.recognition.stop();
-        console.log('_Recognition finished.');
-      }else{
-        this.setText();
-        this.recognition.start(); // Vuelve a escuchar
-      }
+        this.isStoppedSpeechRecognition = false;
+        this.recognition.start();
+        console.log('_Recognition started');
 
+        this.recognition.addEventListener('end', () => {
+          if (this.isStoppedSpeechRecognition) {
+            this.recognition.stop();
+            console.log('_Recognition finished.');
+          } else {
+            this.setText();
+            this.recognition.start(); // Vuelve a escuchar
+          }
+
+          // Resuelve la promesa cuando el reconocimiento termine
+          resolve();
+        });
+      }
     });
+
   }
 
   getText(): string{
@@ -58,7 +65,6 @@ export class VoiceRecognitionService {
 
   stop(){
     this.isStoppedSpeechRecognition = true;
-    this.setText();
     this.recognition.stop();
     console.log('_Recognition finished');
   }

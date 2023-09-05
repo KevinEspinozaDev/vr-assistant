@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AssistantComponent } from './assistant/assistant.component';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from './menu/menu.component';
+const SpeechRecognition = (window as any).webkitSpeechRecognition;
 
 @NgModule({
   declarations: [

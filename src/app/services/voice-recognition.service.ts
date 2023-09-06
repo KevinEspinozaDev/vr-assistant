@@ -11,9 +11,12 @@ export class VoiceRecognitionService {
   isStoppedSpeechRecognition = true;
   text = '';
   tempWords: string = '';
-  private isRecognitionStarted = false; // Nueva variable de estado
 
-  constructor() { }
+  constructor() {
+
+    this.recognition.addEventListener('end', this.handleRecognitionEnd.bind(this));
+
+  }
 
 
   init() {
@@ -23,39 +26,37 @@ export class VoiceRecognitionService {
         .map((result: any) => result.transcript)
         .join('');
 
-      this.tempWords = transcript;
+        this.tempWords = transcript;
     });
+
   }
 
   start(): Promise<void> {
-    console.log('start')
+
     return new Promise<void>((resolve) => {
 
+      this.isStoppedSpeechRecognition = false;
       this.recognition.start();
+      console.log('_Recognition started');
 
-      if (!this.isRecognitionStarted) { // Verifica si el reconocimiento aún no ha comenzado
-        this.isRecognitionStarted = true; // Establece el estado como iniciado
-        this.isStoppedSpeechRecognition = false;
-        console.log('_Recognition started');
+      this.recognition.addEventListener('end', () => {
+        console.log(this.tempWords)
+        this.setText();
 
-        this.recognition.addEventListener('end', () => {
-          if (this.isStoppedSpeechRecognition) {
-            this.recognition.stop();
-            console.log('_Recognition finished.');
-          } else {
-            console.log('setText')
-            this.setText();
-          }
+        // Resuelve la promesa cuando el reconocimiento termine
+        resolve();
+      });
 
-          // Resuelve la promesa cuando el reconocimiento termine
-          resolve();
-        });
-      }
     });
   }
 
   getText(): string{
     return this.text;
+  }
+
+  private handleRecognitionEnd() {
+    console.log(this.tempWords);
+    this.setText();
   }
 
   setText(){
@@ -65,10 +66,9 @@ export class VoiceRecognitionService {
   }
 
   stop() {
-    this.isRecognitionStarted = false; // Establece el estado como no iniciado
-    this.isStoppedSpeechRecognition = true;
     this.recognition.stop();
-
+    this.recognition.abort();
+    this.recognition.listEvent
     console.log('_Recognition finished');
   }
 

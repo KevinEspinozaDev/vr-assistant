@@ -3,7 +3,7 @@ import { ChatGptService } from '../services/chat-gpt.service';
 import { VoiceRecognitionService } from '../services/voice-recognition.service';
 import { Router } from '@angular/router';
 import { ElevenLabsService } from '../services/eleven-labs.service';
-import { environment } from 'environments/environment';
+import { environment } from 'src/environments/environment';
 
 // for Voice Recognition
 declare var responsiveVoice: any;
@@ -72,13 +72,11 @@ export class AssistantComponent {
       this.voiceToTextRecognized = text;
 
       // Reset
-      this.isSpeaking = false;
       this.stopRecognition();
     }
   }
 
   stopRecognition() {
-    console.log('stopRecognition')
     this.voiceRecognitionService.stop();
     this.isSpeaking = false;
   }

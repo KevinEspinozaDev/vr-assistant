@@ -3,7 +3,7 @@ import { ChatGptService } from '../services/chat-gpt.service';
 import { VoiceRecognitionService } from '../services/voice-recognition.service';
 import { Router } from '@angular/router';
 import { ElevenLabsService } from '../services/eleven-labs.service';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
 
 // for Voice Recognition
 declare var responsiveVoice: any;

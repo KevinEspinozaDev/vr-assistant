@@ -53,6 +53,7 @@ export class AssistantComponent {
 
     setTimeout(() => {
       this.initialize();
+      this.sendToChatGPT();
     }, 3000);
   }
 
@@ -83,12 +84,16 @@ export class AssistantComponent {
 
   sendToChatGPT() {
 
-    this.chatGPTService.send(this.voiceToTextRecognized)
+    const test = 'Hola chat gpt, mi nombre es Kevin!';
+
+    this.chatGPTService.send(test) //this.voiceToTextRecognized
     .subscribe({
       next: res => {
         const respuesta: string = res.choices[0].message.content;
         this.chatGPTResponse = respuesta;
+        console.log(this.chatGPTResponse)
 
+        /*
         this.elevenLabsService.generate(this.chatGPTResponse)
         .subscribe(
           (blob: Blob) => {
@@ -98,6 +103,7 @@ export class AssistantComponent {
             console.error('Error generating voice:', error);
           }
         );
+        */
 
       }
     });
@@ -106,6 +112,11 @@ export class AssistantComponent {
 
   playAudio(blob: Blob) {
     const audio = new Audio(URL.createObjectURL(blob));
+    audio.play();
+  }
+
+  playSample(): void{
+    const audio = new Audio('assets/audios/Sample.mp3');
     audio.play();
   }
 

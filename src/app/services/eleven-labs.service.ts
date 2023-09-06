@@ -29,7 +29,7 @@ export class ElevenLabsService {
       // test
       this.setIdVoice(this.voices[0]);
 
-      this.apiUrl = `${environment.API_URL_ELEVENLABS}${this.idVoice}/stream`;
+      this.apiUrl = `${environment.API_URL_ELEVENLABS}${this.idVoice}`;
 
       this.headers = {
         'Accept': 'application/json',
@@ -42,7 +42,14 @@ export class ElevenLabsService {
   generate(text: string): Observable<any>{
 
     const body = {
-      text: text
+      text: text,
+      model_id: 'eleven_multilingual_v2',
+      voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.75,
+          style: 0.5,
+          use_speaker_boost: true
+      }
     };
 
     return this.httpClient.post<Blob>(

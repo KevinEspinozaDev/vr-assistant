@@ -54,7 +54,7 @@ export class AssistantComponent {
     setTimeout(() => {
       this.initialize();
       this.sendToChatGPT();
-      console.log(process.env['API_URL_CHAT_GPT']);
+      console.log(process.env);
     }, 3000);
   }
 

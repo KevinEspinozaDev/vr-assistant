@@ -53,28 +53,27 @@ export class AssistantComponent {
 
     setTimeout(() => {
       this.initialize();
-      this.sendToChatGPT();
-      console.log(process.env);
+      //this.sendToChatGPT();
     }, 3000);
   }
 
   initialize(): void{
-    this.voiceRecognitionService.init();
     this.isDataReady = true;
   }
 
-  // TODO! reiniciar el ciclo de escucha-transcripción y luego desactivar mic
   async startRecognition() {
     this.isSpeaking = true;
 
     if (this.isSpeaking) {
       await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
-      // Coloca aquí la lógica que deseas ejecutar después de que termine el reconocimiento
+
       const text = localStorage.getItem('textVoice')!;
       this.voiceToTextRecognized = text;
 
       // Reset
       this.stopRecognition();
+
+      this.sendToChatGPT(this.voiceToTextRecognized);
     }
   }
 
@@ -83,32 +82,35 @@ export class AssistantComponent {
     this.isSpeaking = false;
   }
 
-  sendToChatGPT() {
+  sendToChatGPT(voiceToTextRecognized: string = 'No se pudo reconocer la voz. Por favor, pide que intente de nuevo.') {
 
-    const test = 'Hola chat gpt, mi nombre es Kevin!';
-
-    this.chatGPTService.send(test) //this.voiceToTextRecognized
+    /*
+    ? TODO: ChatGPT no recuerda conversaciones anteriores.
+    ? Investigar almacenar conversaciones para un usuario.
+    */
+    this.chatGPTService.send(voiceToTextRecognized) //this.voiceToTextRecognized
     .subscribe({
       next: res => {
         const respuesta: string = res.choices[0].message.content;
         this.chatGPTResponse = respuesta;
-        console.log(this.chatGPTResponse)
 
-        /*
-        this.elevenLabsService.generate(this.chatGPTResponse)
-        .subscribe(
-          (blob: Blob) => {
-            this.playAudio(blob);
-          },
-          error => {
-            console.error('Error generating voice:', error);
-          }
-        );
-        */
-
+        this.sendChatGPTToVoice(this.chatGPTResponse);
       }
     });
+  }
 
+  sendChatGPTToVoice(chatGPTResponse: string){
+
+    this.elevenLabsService.generate(chatGPTResponse)
+    .subscribe({
+      next: (blob: Blob) => {
+        this.playAudio(blob);
+      },
+      error: error => {
+        console.error('Error generating voice:', error);
+      }
+
+    });
   }
 
   playAudio(blob: Blob) {
@@ -119,29 +121,6 @@ export class AssistantComponent {
   playSample(): void{
     const audio = new Audio('assets/audios/Sample.mp3');
     audio.play();
-  }
-
-
-  initializeVoices() {
-    const voices = speechSynthesis.getVoices();
-
-    const selectedVoice = voices.find(voice => voice.name.includes('Microsoft Sabina - Spanish (Mexico)'));
-
-    if (selectedVoice) {
-      const utterance = new SpeechSynthesisUtterance();
-      utterance.voice = selectedVoice;
-      utterance.lang = this.lang;
-      utterance.text = '¡Hola! Esta es una voz de mujer. Espero que estés bien';
-      utterance.volume = 5;
-      speechSynthesis.speak(utterance);
-    } else {
-      console.log('No se encontró una voz de mujer disponible.');
-    }
-  }
-
-  test(){
-    console.log('click!')
-    this.isSpeaking = !this.isSpeaking;
   }
 
   salir(): void{

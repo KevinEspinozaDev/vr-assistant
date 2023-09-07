@@ -13,9 +13,8 @@ export class VoiceRecognitionService {
   tempWords: string = '';
 
   constructor() {
-
-    this.recognition.addEventListener('end', this.handleRecognitionEnd.bind(this));
-
+    this.init();
+    this.recognition.lang = 'es-ES';
   }
 
 
@@ -39,8 +38,12 @@ export class VoiceRecognitionService {
       this.recognition.start();
       console.log('_Recognition started');
 
+      /*
+      TODO No se cierra correctamente el reconocimiento.
+      TODO Se ejecuta el evento end consecutivamente. Puede ocasionar
+      TODO memory leaks.
+      */
       this.recognition.addEventListener('end', () => {
-        console.log(this.tempWords)
         this.setText();
 
         // Resuelve la promesa cuando el reconocimiento termine
@@ -54,15 +57,9 @@ export class VoiceRecognitionService {
     return this.text;
   }
 
-  private handleRecognitionEnd() {
-    console.log(this.tempWords);
-    this.setText();
-  }
-
   setText(){
     this.text = this.tempWords;
     localStorage.setItem('textVoice', this.text);
-    this.tempWords = '';
   }
 
   stop() {

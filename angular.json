@@ -17,6 +17,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "aframe-event-set-component"
+            ],
             "outputPath": "dist/vr-assistant",
             "index": "src/index.html",
             "main": "src/main.ts",

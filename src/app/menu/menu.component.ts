@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import 'aframe-event-set-component';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -10,12 +11,14 @@ import 'aframe-event-set-component';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
 
 
   formSettings: FormGroup = this.formBuilder.group({
     // Settings before starting
   });
+
+  env = environment.env;
 
   constructor(
     private router: Router,

@@ -26,15 +26,30 @@
   scale="0.4 0.4 0.4"
   position="-0.5 0.4 -1"
   crossOrigin="anonymous"
-  (click)="stopRecognition()"
+  (click)="set()"
   ></a-entity>
+
+  <a-plane
+  id="board"
+  color="green"
+  position="3 1.4 -1.5"
+  rotation="0 0 0"
+  width="5" height="1"></a-plane>
+  <a-text
+  id="text"
+  position="0.6 1.5 -1.5"
+  rotation="0 0 0"
+  [attr.value]="chatGPTResponse"
+  ></a-text>
+
+
 
   <a-entity gltf-model="#micOff"
   *ngIf="isDataReady && !isSpeaking"
   scale="0.4 0.4 0.4"
   position="-0.5 0.4 -1"
   crossOrigin="anonymous"
-  (click)="startRecognition()"
+  (click)="set()"
   ></a-entity>
 
   <a-plane position="0 0 0" rotation="-90 0 0"

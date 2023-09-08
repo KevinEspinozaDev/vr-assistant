@@ -88,7 +88,7 @@ export class AssistantComponent {
     ? TODO: ChatGPT no recuerda conversaciones anteriores.
     ? Investigar almacenar conversaciones para un usuario.
     */
-    this.chatGPTService.send(voiceToTextRecognized) //this.voiceToTextRecognized
+    this.chatGPTService.send(voiceToTextRecognized)
     .subscribe({
       next: res => {
         const respuesta: string = res.choices[0].message.content;
@@ -101,7 +101,14 @@ export class AssistantComponent {
 
   sendChatGPTToVoice(chatGPTResponse: string){
 
-    this.elevenLabsService.generate(chatGPTResponse)
+    this.elevenLabsService.generate(
+      chatGPTResponse,
+      "eleven_multilingual_v2",
+      0.5,
+      0.85,
+      0.2,
+      true
+    )
     .subscribe({
       next: (blob: Blob) => {
         this.playAudio(blob);

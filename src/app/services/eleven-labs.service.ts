@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
+import { ParamsVoiceElevenLabsV2 } from '../interfaces/params-voice-eleven-labs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,11 @@ export class ElevenLabsService {
   apiUrl: string;
   headers: any;
 
-  voices: string[] = ['XB0fDUnXU5powFXDhCwa']; //Charlotte
-  model_id: string = 'eleven_multilingual_v2';
+  voiceIDCharlotte: string = 'XB0fDUnXU5powFXDhCwa'; //Charlotte
 
-  idVoice: string = '';
+  voiceIDSelected: string = '';
 
-  data: any;
-
-  options: any;
+  options: object = {};
 
   constructor(
     private httpClient: HttpClient
@@ -27,9 +25,9 @@ export class ElevenLabsService {
       this.key = environment.KEY_ELEVENLABS;
 
       // test
-      this.setIdVoice(this.voices[0]);
+      this.setIdVoice(this.voiceIDCharlotte);
 
-      this.apiUrl = `${environment.API_URL_ELEVENLABS}${this.idVoice}`;
+      this.apiUrl = `${environment.API_URL_ELEVENLABS}${this.voiceIDSelected}`;
 
       this.headers = {
         'Accept': 'application/json',
@@ -39,16 +37,23 @@ export class ElevenLabsService {
       this.options = { headers: this.headers };
   }
 
-  generate(text: string): Observable<any>{
+  generate(
+    text: string,
+    model_id: 'eleven_multilingual_v2',
+    stability: number,
+    similarity_boost: number,
+    style: number,
+    use_speaker_boost: boolean
+  ): Observable<any>{
 
-    const body = {
-      text: text,
-      model_id: 'eleven_multilingual_v2',
+    const body: ParamsVoiceElevenLabsV2 = {
+      text,
+      model_id,
       voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.75,
-          style: 0.5,
-          use_speaker_boost: true
+          stability,
+          similarity_boost,
+          style,
+          use_speaker_boost
       }
     };
 
@@ -63,6 +68,6 @@ export class ElevenLabsService {
   }
 
   setIdVoice(id: string): void{
-    this.idVoice = id;
+    this.voiceIDSelected = id;
   }
 }

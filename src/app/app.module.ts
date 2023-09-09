@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AssistantComponent } from './assistant/assistant.component';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from './menu/menu.component';
+import { RemoveAccentsPipe } from './pipes/remove-accents.pipe';
 const SpeechRecognition = (window as any).webkitSpeechRecognition;
 
 @NgModule({
@@ -15,6 +16,7 @@ const SpeechRecognition = (window as any).webkitSpeechRecognition;
     AppComponent,
     AssistantComponent,
     MenuComponent,
+    RemoveAccentsPipe,
   ],
   imports: [
     BrowserModule,

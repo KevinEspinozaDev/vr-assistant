@@ -28,6 +28,7 @@ export class AssistantComponent {
 
   audioBlobUrl: string = environment.API_URL_ELEVENLABS;
   audioUrl = 'assets/audios/';
+  gettingAudio: boolean = false;
   audioReady: boolean = false;
 
   chatGPTResponse: string = '';
@@ -102,6 +103,8 @@ export class AssistantComponent {
 
   sendChatGPTToVoice(chatGPTResponse: string){
 
+    this.gettingAudio = true;
+
     this.elevenLabsService.generate(
       chatGPTResponse,
       "eleven_multilingual_v2",
@@ -114,6 +117,7 @@ export class AssistantComponent {
       next: (blob: Blob) => {
         if (blob) {
           this.audioReady = true;
+          this.gettingAudio = false;
           this.playAudio(blob);
         }
       },
@@ -132,6 +136,10 @@ export class AssistantComponent {
   playSample(): void{
     const audio = new Audio('assets/audios/Sample.mp3');
     audio.play();
+  }
+
+  reload(): void{
+    window.location.reload();
   }
 
   salir(): void{

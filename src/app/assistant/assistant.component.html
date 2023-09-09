@@ -30,18 +30,25 @@
   width="5" height="1"></a-plane>
   -->
   <a-text
-  *ngIf="audioReady"
+  *ngIf="audioReady && !gettingAudio"
   id="text"
   position="0.6 1.5 -1.5"
   rotation="0 0 0"
-  [attr.value]="chatGPTResponse"
+  [attr.value]="chatGPTResponse | removeAccents"
+  ></a-text>
+  <a-text
+  *ngIf="!audioReady && gettingAudio"
+  id="text"
+  position="0.5 1.5 -1.5"
+  rotation="0 0 0"
+  value="Cargando respuesta ..."
   ></a-text>
 
 
   <a-entity gltf-model="#micOn"
   *ngIf="isDataReady && isSpeaking"
   scale="0.4 0.4 0.4"
-  position="-0.5 0.4 -1"
+  position="-0.5 0.6 -1"
   crossOrigin="anonymous"
   (click)="stopRecognition()"
   ></a-entity>
@@ -49,7 +56,7 @@
   <a-entity gltf-model="#micOff"
   *ngIf="isDataReady && !isSpeaking"
   scale="0.4 0.4 0.4"
-  position="-0.5 0.4 -1"
+  position="-0.5 0.6 -1"
   crossOrigin="anonymous"
   (click)="startRecognition()"
   ></a-entity>
@@ -60,6 +67,13 @@
   <a-entity position="3 2 0" rotation="0 270 0" (click)="salir()">
     <a-box color="red" scale="0.5 0.5 0.5"></a-box>
     <a-text value="Salir" color="white" scale="0.5 0.5 0.5" align="center"
+    rotation="0 0 0"
+    position="0 0 0.3"></a-text>
+  </a-entity>
+
+  <a-entity position="3 1 0" rotation="0 270 0" (click)="reload()">
+    <a-box color="blue" scale="0.5 0.5 0.5"></a-box>
+    <a-text value="Reiniciar" color="white" scale="0.5 0.5 0.5" align="center"
     rotation="0 0 0"
     position="0 0 0.3"></a-text>
   </a-entity>

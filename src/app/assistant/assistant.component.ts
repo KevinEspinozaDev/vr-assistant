@@ -105,9 +105,9 @@ export class AssistantComponent {
     this.elevenLabsService.generate(
       chatGPTResponse,
       "eleven_multilingual_v2",
-      0.6,
       0.5,
-      0.15,
+      0.5,
+      0.25,
       true
     )
     .subscribe({

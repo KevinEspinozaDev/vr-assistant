@@ -104,8 +104,8 @@ export class AssistantComponent {
       chatGPTResponse,
       "eleven_multilingual_v2",
       0.9,
-      0.85,
-      0.2,
+      0.5,
+      0.15,
       true
     )
     .subscribe({

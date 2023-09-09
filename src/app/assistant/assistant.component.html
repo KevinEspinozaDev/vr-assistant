@@ -21,14 +21,6 @@
   crossOrigin="anonymous"
   ></a-entity>
 
-  <a-entity gltf-model="#micOn"
-  *ngIf="isDataReady && isSpeaking"
-  scale="0.4 0.4 0.4"
-  position="-0.5 0.4 -1"
-  crossOrigin="anonymous"
-  (click)="set()"
-  ></a-entity>
-
   <a-plane
   id="board"
   color="green"
@@ -43,12 +35,20 @@
   ></a-text>
 
 
+  <a-entity gltf-model="#micOn"
+  *ngIf="isDataReady && isSpeaking"
+  scale="0.4 0.4 0.4"
+  position="-0.5 0.4 -1"
+  crossOrigin="anonymous"
+  (click)="stopRecognition()"
+  ></a-entity>
+
   <a-entity gltf-model="#micOff"
   *ngIf="isDataReady && !isSpeaking"
   scale="0.4 0.4 0.4"
   position="-0.5 0.4 -1"
   crossOrigin="anonymous"
-  (click)="set()"
+  (click)="startRecognition()"
   ></a-entity>
 
   <a-plane position="0 0 0" rotation="-90 0 0"

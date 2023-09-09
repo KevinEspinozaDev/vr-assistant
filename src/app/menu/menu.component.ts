@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import 'aframe-event-set-component';
-import { environment } from 'src/environments/environment';
-
 
 @Component({
   selector: 'app-menu',
@@ -17,8 +15,6 @@ export class MenuComponent implements OnInit {
   formSettings: FormGroup = this.formBuilder.group({
     // Settings before starting
   });
-
-  env = environment.env;
 
   constructor(
     private router: Router,

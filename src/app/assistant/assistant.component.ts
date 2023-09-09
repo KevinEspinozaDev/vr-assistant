@@ -28,6 +28,7 @@ export class AssistantComponent {
 
   audioBlobUrl: string = environment.API_URL_ELEVENLABS;
   audioUrl = 'assets/audios/';
+  audioReady: boolean = false;
 
   chatGPTResponse: string = '';
 
@@ -62,6 +63,7 @@ export class AssistantComponent {
 
   async startRecognition() {
     this.isSpeaking = true;
+    this.audioReady = false;
 
     if (this.isSpeaking) {
       await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
@@ -111,6 +113,7 @@ export class AssistantComponent {
     .subscribe({
       next: (blob: Blob) => {
         if (blob) {
+          this.audioReady = true;
           this.playAudio(blob);
         }
       },

@@ -7,9 +7,6 @@ import { Observable } from 'rxjs';
 })
 export class GoogleSpeechService {
 
-  API_URL_CHAT_GPT: string = 'https://texttospeech.googleapis.com/v1/text:synthesize';
-  API_KEY: string = 'TU_CLAVE_API_DE_GOOGLE'; // Reemplaza esto con tu clave API
-
   constructor(
     private httpClient: HttpClient
   ) {
@@ -18,7 +15,7 @@ export class GoogleSpeechService {
   send(text: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.API_KEY}`
+      Authorization: `Bearer `
     });
 
     const requestData = {
@@ -27,6 +24,6 @@ export class GoogleSpeechService {
       "audioConfig": { audioEncoding: 'MP3' }
     };
 
-    return this.httpClient.post(this.API_URL_CHAT_GPT, requestData, { headers: headers });
+    return this.httpClient.post('', requestData, { headers: headers });
   }
 }

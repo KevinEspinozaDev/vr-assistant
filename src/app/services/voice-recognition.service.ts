@@ -64,8 +64,6 @@ export class VoiceRecognitionService {
 
   stop() {
     this.recognition.stop();
-    this.recognition.abort();
-    this.recognition.listEvent
     console.log('_Recognition finished');
   }
 

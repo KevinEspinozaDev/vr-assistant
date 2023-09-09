@@ -30,7 +30,6 @@ export class AssistantComponent {
   audioUrl = 'assets/audios/';
 
   chatGPTResponse: string = '';
-  flag = false;
 
   conversation: string = '';
 
@@ -55,7 +54,7 @@ export class AssistantComponent {
     setTimeout(() => {
       this.initialize();
       //this.sendToChatGPT();
-    }, 3000);
+    }, 2000);
   }
 
   initialize(): void{
@@ -98,15 +97,6 @@ export class AssistantComponent {
         //this.sendChatGPTToVoice(this.chatGPTResponse);
       }
     });
-  }
-
-  set(): void{
-    this.chatGPTResponse = 'Hola soy un texto!... Hola soy un texto!... Hola soy un texto!... Hola soy un texto!...'
-
-    setTimeout(() => {
-      console.log('set')
-      this.flag = true
-    }, 2000);
   }
 
   sendChatGPTToVoice(chatGPTResponse: string){

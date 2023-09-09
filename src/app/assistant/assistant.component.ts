@@ -95,7 +95,7 @@ export class AssistantComponent {
         const respuesta: string = res.choices[0].message.content;
         this.chatGPTResponse = respuesta;
 
-        this.sendChatGPTToVoice(this.chatGPTResponse);
+        //this.sendChatGPTToVoice(this.chatGPTResponse);
       }
     });
   }

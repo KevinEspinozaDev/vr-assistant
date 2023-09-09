@@ -30,6 +30,7 @@ export class AssistantComponent {
   audioUrl = 'assets/audios/';
   gettingAudio: boolean = false;
   audioReady: boolean = false;
+  notRecognizedOrVoid: boolean = false;
 
   chatGPTResponse: string = '';
 
@@ -65,6 +66,7 @@ export class AssistantComponent {
   async startRecognition() {
     this.isSpeaking = true;
     this.audioReady = false;
+    this.notRecognizedOrVoid = false;
 
     if (this.isSpeaking) {
       await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
@@ -75,7 +77,11 @@ export class AssistantComponent {
       // Reset
       this.stopRecognition();
 
-      this.sendToChatGPT(this.voiceToTextRecognized);
+      if (this.voiceToTextRecognized !== "" && this.voiceToTextRecognized.length > 2) {
+        this.sendToChatGPT(this.voiceToTextRecognized);
+      }else{
+        this.notRecognizedOrVoid = true;
+      }
     }
   }
 

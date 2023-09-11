@@ -68,21 +68,20 @@ export class AssistantComponent {
     this.audioReady = false;
     this.notRecognizedOrVoid = false;
 
-    if (this.isSpeaking) {
-      await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
+    await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
 
-      const text = localStorage.getItem('textVoice')!;
-      this.voiceToTextRecognized = text;
+    const text = localStorage.getItem('textVoice')!;
+    this.voiceToTextRecognized = text;
 
-      // Reset
-      this.stopRecognition();
+    // Reset
+    this.stopRecognition();
 
-      if (this.voiceToTextRecognized !== "" && this.voiceToTextRecognized.length > 2) {
-        this.sendToChatGPT(this.voiceToTextRecognized);
-      }else{
-        this.notRecognizedOrVoid = true;
-      }
+    if (this.voiceToTextRecognized !== "" && this.voiceToTextRecognized.length > 3) {
+      this.sendToChatGPT(this.voiceToTextRecognized);
+    }else{
+      this.notRecognizedOrVoid = true;
     }
+
   }
 
   stopRecognition() {
@@ -92,11 +91,13 @@ export class AssistantComponent {
 
   sendToChatGPT(voiceToTextRecognized: string = 'No se pudo reconocer la voz. Por favor, pide que intente de nuevo.') {
 
+    const finalOrderToChatGPT: string = this.addExtraPhrasesToOrder(voiceToTextRecognized);
+
     /*
     ? TODO: ChatGPT no recuerda conversaciones anteriores.
     ? Investigar almacenar conversaciones para un usuario.
     */
-    this.chatGPTService.send(voiceToTextRecognized)
+    this.chatGPTService.send(finalOrderToChatGPT)
     .subscribe({
       next: res => {
         const respuesta: string = res.choices[0].message.content;
@@ -105,6 +106,11 @@ export class AssistantComponent {
         this.sendChatGPTToVoice(this.chatGPTResponse);
       }
     });
+  }
+
+  addExtraPhrasesToOrder(phrase: string): string{
+    const order1: string = 'Por favor response lo más brevemente posible a esta orden. Menos de 70 palabras.';
+    return `${phrase}. ${order1}.`;
   }
 
   sendChatGPTToVoice(chatGPTResponse: string){

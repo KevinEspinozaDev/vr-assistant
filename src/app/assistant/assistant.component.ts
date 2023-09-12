@@ -109,7 +109,7 @@ export class AssistantComponent {
   }
 
   addExtraPhrasesToOrder(phrase: string): string{
-    const order1: string = 'Por favor response lo más brevemente posible a esta orden. Menos de 70 palabras.';
+    const order1: string = 'Por favor responde con solo una oración o si es necesario con menos de 70 palabras.';
     return `${phrase}. ${order1}.`;
   }
 

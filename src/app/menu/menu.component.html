@@ -1,9 +1,17 @@
 <div class="container">
   <h1>Assistant VR</h1>
-  <h4>Versión 0.1 - Final Curso Realidad Virtual/Realidad Aumentada</h4>
+  <h4 class="textCenter">Versión 0.1 - Final Curso Realidad Virtual/Realidad Aumentada</h4>
   <h4>Universidad Nacional del Comahue - 2023 </h4>
 
   <br><br><br><br>
 
-  <button class="startButton" (click)="startAssistant()">Comenzar</button>
+  <button class="startButton"
+  [disabled]="permissionOk"
+  (click)="micPermission()">Acceso al micrófono</button>
+
+  <br><br><br>
+
+  <button
+  *ngIf="permissionOk"
+  class="startButton" (click)="startAssistant()">Comenzar</button>
 </div>

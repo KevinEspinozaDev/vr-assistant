@@ -64,22 +64,26 @@ export class AssistantComponent {
   }
 
   async startRecognition() {
-    this.isSpeaking = true;
-    this.audioReady = false;
-    this.notRecognizedOrVoid = false;
 
-    await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
+    if (!this.gettingAudio) {
 
-    const text = localStorage.getItem('textVoice')!;
-    this.voiceToTextRecognized = text;
+      this.isSpeaking = true;
+      this.audioReady = false;
+      this.notRecognizedOrVoid = false;
 
-    // Reset
-    this.stopRecognition();
+      await this.voiceRecognitionService.start(); // Espera a que termine el reconocimiento
 
-    if (this.voiceToTextRecognized !== "" && this.voiceToTextRecognized.length > 3) {
-      this.sendToChatGPT(this.voiceToTextRecognized);
-    }else{
-      this.notRecognizedOrVoid = true;
+      const text = localStorage.getItem('textVoice')!;
+      this.voiceToTextRecognized = text;
+
+      // Reset
+      this.stopRecognition();
+
+      if (this.voiceToTextRecognized !== "" && this.voiceToTextRecognized.length > 3) {
+        this.sendToChatGPT(this.voiceToTextRecognized);
+      }else{
+        this.notRecognizedOrVoid = true;
+      }
     }
 
   }
@@ -109,7 +113,7 @@ export class AssistantComponent {
   }
 
   addExtraPhrasesToOrder(phrase: string): string{
-    const order1: string = 'Por favor responde con solo una oración o si es necesario con menos de 70 palabras.';
+    const order1: string = 'Por favor responde con una oración corta o si es muy necesario con menos de 70 palabras.';
     return `${phrase}. ${order1}.`;
   }
 
@@ -120,9 +124,9 @@ export class AssistantComponent {
     this.elevenLabsService.generate(
       chatGPTResponse,
       "eleven_multilingual_v2",
+      0.4,
       0.5,
-      0.5,
-      0.25,
+      0.3,
       true
     )
     .subscribe({
